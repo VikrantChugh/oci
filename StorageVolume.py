@@ -18,6 +18,8 @@ def get_volumes():
        
 
         for volume in volumes:
+            Tag=volume.defined_tags['Oracle-Tags']
+            Tags=str(Tag)
             Name=volume.display_name
             Object_id=volume.id
             State=volume.lifecycle_state
@@ -37,7 +39,8 @@ def get_volumes():
                 "Account_id" :       signer.tenancy_id or ' ',
                 'size_in_gb':        Size_in_gbs or ' ',
                 'Datacenter':        signer.tenancy_id or ' ',
-                "Avalibility_zone" : Availability_domain or ' '
+                "Avalibility_zone" : Availability_domain or ' ',
+                "Tags":              Tags or ' '
             })
         insert_storage_volume_into_db(storage_list)    
     except Exception as e:
@@ -80,7 +83,8 @@ def insert_storage_volume_into_db(storage_list):
             Account_id varchar(100),
             Size varchar(50),
             DataCenter varchar(100),
-            Avalibility_zone varchar(50)
+            Avalibility_zone varchar(50),
+            Tags varchar(100)
 
         );"""
 
@@ -90,12 +94,12 @@ def insert_storage_volume_into_db(storage_list):
         
         for iteam in storage_list:
             insert_query = """
-                INSERT INTO cmdb_ci_storage_volume(Name,Object_id,State,Size_bytes,Volume_ID,Account_id,Size,Datacenter,Avalibility_zone) 
-                values(%s,%s,%s,%s,%s,%s,%s,%s,%s);
+                INSERT INTO cmdb_ci_storage_volume(Name,Object_id,State,Size_bytes,Volume_ID,Account_id,Size,Datacenter,Avalibility_zone,Tags) 
+                values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
             """
         
             try:
-                cursor.execute(insert_query,(iteam['Name'],iteam['Object_id'],iteam['State'],iteam['Size_bytes'],iteam['Volume_ID'],iteam['Account_id'],iteam['size_in_gb'],iteam['Datacenter'],iteam['Avalibility_zone']))
+                cursor.execute(insert_query,(iteam['Name'],iteam['Object_id'],iteam['State'],iteam['Size_bytes'],iteam['Volume_ID'],iteam['Account_id'],iteam['size_in_gb'],iteam['Datacenter'],iteam['Avalibility_zone'],iteam['Tags']))
                 
             except pymysql.Error as e:
                 print(f"Error: {e}")
