@@ -121,4 +121,4 @@ def insert_vm_details_into_database(final_list):
         raise Exception(f"Error inserting data into RDS: {str(e)}")   
         
 # insert_vm_details_into_database(vm_list)
-get_all_vm_details()
+# get_all_vm_details()
