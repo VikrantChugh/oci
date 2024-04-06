@@ -28,13 +28,14 @@ def get_service_account_details():
             'Object_id':   tenancy_response.get('_id',' '),
             'Organization_id': tenancy_response.get('_id',' '),
             'Is_master_account': Master_account or ' ',
-            'Tags': tenancy_response.get('_defined_tags',' ').get('Oracle-Tags',' ')
+            'Tags': str(tenancy_response.get('_defined_tags',' ').get('Oracle-Tags',' '))
         })
         compartments = identity_client.list_compartments(signer.tenancy_id)
         # Get the list of compartments
         for compartment in compartments.data:  
             compartment_response=compartment.__dict__
             Tag=compartment.defined_tags.get('Oracle-Tags' , ' ')
+            # print(type(str(compartment_response.get('_defined_tags',' ').get('Oracle-Tags',' '))))
             Tags=str(Tag) 
             compartment_name=compartment.name
             # response.get('_name', ' ')
@@ -51,7 +52,7 @@ def get_service_account_details():
                         'Object_id':  compartment_response.get('_name', ' '),
                         'Organization_id':  tenancy_response.get('_id',' '),
                         'Is_master_account':master_account or ' ',
-                        'Tags': compartment_response.get('_defined_tags',' ').get('Oracle-Tags',' ')
+                        'Tags': str(compartment_response.get('_defined_tags',' ').get('Oracle-Tags',' '))
                     }
                 )
         insert_service_account_details_into_database(account_list)
@@ -108,7 +109,7 @@ def insert_service_account_details_into_database(account_list):
         connection.close()
 
     except Exception as e:
-        raise Exception(f"Error inserting data into RDS: {str(e)}")   
+        raise Exception(f"Error inserting data into RDS: {str(e)}")  
   
 
 get_service_account_details()
