@@ -13,6 +13,7 @@ def get_service_account_details():
 
         # Get details of the tenancy
         tenancy = identity_client.get_tenancy(signer.tenancy_id).data
+        # Convert object into dictionary type
         tenancy_response = tenancy.__dict__
         
         # Check if the tenancy is the master account
@@ -33,12 +34,14 @@ def get_service_account_details():
         
         # Iterate through compartments
         for compartment in compartments.data:  
+            # Convert object into dictionary type
             compartment_response = compartment.__dict__
-            compartment_id = compartment.id
-            compartment_lifecycle_state = compartment.lifecycle_state    
-            master_account = "Yes" if compartment_id == signer.tenancy_id else "No"
+          
+            # Check if the compartment is the master account
+            master_account = "Yes" if compartment_response.get('_id', ' ') == signer.tenancy_id else "No"
 
-            if compartment_lifecycle_state == "ACTIVE": 
+            # Check if compartment is active
+            if compartment_response.get('_lifecycle_state', ' ') == "ACTIVE": 
                 # Append compartment details to account_list
                 account_list.append(
                     {
