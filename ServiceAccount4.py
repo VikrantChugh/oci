@@ -25,7 +25,7 @@ def get_service_account_details():
             'Account_id': tenancy_response.get('_id',' '),
             'Object_id': tenancy_response.get('_id',' '),
             'Organization_id': tenancy_response.get('_id',' '),
-            'Is_master_account': Master_account or ' ',
+            'Is_master_account': Master_account ,
             'Tags': str(tenancy_response.get('_defined_tags',' ').get('Oracle-Tags',' '))
         })
         
@@ -50,7 +50,7 @@ def get_service_account_details():
                         'Account_id': compartment_response.get('_id', ' '),
                         'Object_id':  compartment_response.get('_name', ' '),
                         'Organization_id': tenancy_response.get('_id',' '),
-                        'Is_master_account': master_account or ' ',
+                        'Is_master_account': master_account ,
                         'Tags': str(compartment_response.get('_defined_tags',' ').get('Oracle-Tags',' '))
                     }
                 )
