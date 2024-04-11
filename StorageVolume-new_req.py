@@ -24,11 +24,12 @@ def get_volumes():
 
             for volume in volumes:
                 for attached_volume in attached_volumes:
+                    print(attached_volume)
                     attach=attached_volume.__dict__
                     # print(attach)
                     if attached_volume.volume_id==volume.id:
                         vm_list.append({
-                            'Vm_object_id':attach.get('_volume_id', ' ')
+                            'Vm_object_id':attach.get('_instance_id', ' ')
                         })
 
                 Tag=volume.defined_tags['Oracle-Tags']
@@ -51,7 +52,7 @@ def get_volumes():
                     'Volume_ID' :        Volume_ID or ' ',
                     "Account_id" :       signer.tenancy_id or ' ',
                     'size_in_gb':        Size_in_gbs or ' ',
-                    'Datacenter':        signer.tenancy_id or ' ',
+                    'Datacenter':        signer.region or ' ',
                     "Avalibility_zone" : Availability_domain or ' ',
                     "Tags":              Tags or ' '
                 })
