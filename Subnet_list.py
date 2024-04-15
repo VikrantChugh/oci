@@ -34,7 +34,7 @@ def get_all_subnet():
                     'cidr_block':subnet.cidr_block,
                     'domain_name'  : subnet.subnet_domain_name,
                     'State'   : subnet.lifecycle_state,
-                    'account_id':signer.tenancy_id,
+                    'account_id':compartment_id,
                     'Datacenter': signer.region,
                     'Network_Object_ID':subnet.vcn_id
 
@@ -112,4 +112,3 @@ def insert_subnet(subnet_list):
 
 # insert_subnet(subnet_list)
 get_all_subnet()
-
