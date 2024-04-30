@@ -31,6 +31,10 @@ def get_volumes():
                         vm_list.append({
                             'Vm_object_id':attach.get('_instance_id', ' ')
                         })
+                    else:
+                        vm_list.append({
+                            'Vm_object_id':' '
+                        })
 
                 Tag=volume.defined_tags['Oracle-Tags']
                 Tags=str(Tag)
