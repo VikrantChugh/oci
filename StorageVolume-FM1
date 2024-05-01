@@ -34,6 +34,7 @@ def get_storage_volume_details():
                         try:
                             Vm_object_id=' ' if not attached_volumes else attached_volumes[0].__dict__.get('_instance_id',' ')
                         except:
+                            print("one storage volume attached with multiple instance")
                             Vm_object_id=' '
 
                         
