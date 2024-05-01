@@ -25,17 +25,20 @@ def get_subnet_details():
 
             # Extract and print instance details
                     for subnet in list_subnets_response.data:
+                        subnet_response=subnet.__dict__
                         # print(subnet)
+                        subnet_response.get('_vcn_id',' ')
                         # print(subnet.vcn_id)
                         subnet_list.append({
-                            'display_name' : subnet.display_name,
-                            'id'  : subnet.id,
-                            'cidr_block':subnet.cidr_block,
-                            'domain_name'  : subnet.subnet_domain_name,
-                            'State'   : subnet.lifecycle_state,
+                            'display_name' : subnet_response.get('_display_name',' '),
+                            'id'  : subnet_response.get('_id',' '),
+                            'cidr_block':subnet_response.get('_cidr_block',' '),
+                            'domain_name'  : subnet_response.get('_subnet_domain_name',' '),
+                            'State'   : subnet_response.get('_lifecycle_state',' '),
                             'account_id':compartment.id,
                             'Datacenter': signer.region,
-                            'Network_Object_ID':subnet.vcn_id
+                            'Network_Object_ID':subnet_response.get('_vcn_id',' '),
+                            'Tags': str(subnet_response.get('_defined_tags',' ').get('Oracle-Tags',' '))
 
                             })
                 except Exception as e:
@@ -86,7 +89,8 @@ def insert_subnet(subnet_list):
             state varchar(50),
             Account_ID varchar(100),
             Datacenter varchar(50),
-            Network_Object_ID varchar(100)
+            Network_Object_ID varchar(100),
+            Tags varchar(200)
 
         );"""
 
@@ -96,11 +100,11 @@ def insert_subnet(subnet_list):
         
         for n in subnet_list:
             insert_query = """
-                INSERT INTO cmdb_ci_cloud_subnet(Name,Object_id,cidr,Domain_name,state,Account_ID,Datacenter,Network_Object_ID) 
-                values(%s,%s,%s,%s,%s,%s,%s,%s);
+                INSERT INTO cmdb_ci_cloud_subnet(Name,Object_id,cidr,Domain_name,state,Account_ID,Datacenter,Network_Object_ID,Tags) 
+                values(%s,%s,%s,%s,%s,%s,%s,%s,%s);
             """
             try:
-                cursor.execute(insert_query,(n['display_name'],n['id'],n['cidr_block'],n['domain_name'],n['State'],n['account_id'],n['Datacenter'],n['Network_Object_ID']))
+                cursor.execute(insert_query,(n['display_name'],n['id'],n['cidr_block'],n['domain_name'],n['State'],n['account_id'],n['Datacenter'],n['Network_Object_ID'],n['Tags']))
                 
             except pymysql.Error as e:
                 print(f"Error: {e}")
