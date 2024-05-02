@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 #
 
 def get_storage_volume_details():
-    storage_list=[]    
+    storage_list=[]   
+    Vm_object_id=' ' 
     try:
         # compartment_ids = ['ocid1.compartment.oc1..aaaaaaaajnmd2vir2bjsphzpskjaz3gohvqy7w6xwaz3jqfkqeshuwolauqq','ocid1.compartment.oc1..aaaaaaaa7nxivmvn7wff2j4azbwncx4ywnmfuhx4eugo55huwwuozxysdw4a']
         signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
@@ -28,15 +29,24 @@ def get_storage_volume_details():
                 
 
                     for volume in volumes:
-                        attached_volumes = compute_client.list_volume_attachments(compartment_id=compartment.id,volume_id=volume.id).data
+                        print("times")
+                        # Vm_object_id=' '
+                        
+                        attached_volumes_list = compute_client.list_volume_attachments(compartment_id=compartment.id,volume_id=volume.id).data
                         
                         # "Yes" if not attached_volumes else "No"
-                        try:
-                            Vm_object_id=' ' if not attached_volumes else attached_volumes[0].__dict__.get('_instance_id',' ')
-                        except:
-                            print("one storage volume attached with multiple instance")
+                        if not attached_volumes_list:
+                            # print("zero")
                             Vm_object_id=' '
-
+                        for attached_volumes in attached_volumes_list:                    
+                            if attached_volumes.lifecycle_state=='ATTACHED': 
+                                # print("hello")
+                                Vm_object_id=attached_volumes.__dict__.get('_instance_id',' ')
+                                break                          
+                            else:
+                                # print("else")
+                                Vm_object_id=' '
+                        
                         
                         Tag=volume.defined_tags['Oracle-Tags']
                         Tags=str(Tag)
