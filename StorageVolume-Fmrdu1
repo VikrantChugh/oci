@@ -80,7 +80,7 @@ def get_storage_volume_details():
                                 'State'  :           State or ' ',
                                 'Size_bytes':        Size_bytes or ' ',
                                 'Volume_ID' :        Volume_ID or ' ',
-                                "Account_id" :       signer.tenancy_id or ' ',
+                                "Account_id" :       compartment.id or ' ',
                                 'size_in_gb':        Size_in_gbs or ' ',
                                 'Datacenter':        signer.region or ' ',
                                 "Avalibility_zone" : Availability_domain or ' ',
